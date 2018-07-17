@@ -1,0 +1,17 @@
+{
+  "name": "mern-react-auth",
+  "version": "1.0.0",
+  "description": "Node passport setup for a typical react application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server/server"
+  },
+  "author": "Azemoh Paul",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "passport": "^0.4.0"
+  }
+}
