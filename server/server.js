@@ -40,7 +40,6 @@ container.resolve(function(auth) {
     app.use(router)
   }
 
-
   function ConfigureExpress(app) {
     require('./services/passport-local');
     require('./services/passport-jwt')
