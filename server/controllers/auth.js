@@ -22,51 +22,61 @@ module.exports = function (passport, User, tokenForUser, checkAuth, authValidato
      * User Login
     ******************************/
     async login (req, res, next) {
-      const validationResult = await authValidator.validateLoginForm(req.body);
-      console.log('validationResult :', '**{{{', validationResult, '}}}**')
-
       // User has already had their email and password auth'd
       // We just need to give them a token
       const token = await tokenForUser.tokenForUser(req.user)
-      res.send({ token }); 
+      return res.status(200).json({ token });
     },
     /****************
      * User Register
     ******************************/
     async register (req, res, next) {
+      //validate user input
       const validationResult = await authValidator.validateSignupForm(req.body);
-      console.log('validationResult :', '**{{{', validationResult, '}}}**')
 
       if (!validationResult.success) {
         return res.status(400).json({
           success: false,
-          message: validationResult.message,
-          errors: validationResult.errors
+          error: validationResult.errors
         });
       }
 
       const { email, password, username } = req.body;
 
-      // if(!email || !password) {
-      //   return res.status(422).send({ error: 'Email and password required'})
-      // }
-
       await User.findOne({ email: email }, async (err, existingUser) => {
-        if(err) { return next(err); }
+        if(err) { 
+          return next(err); 
+
+          // return res.status(400).json({
+          //   success: false,
+          //   error: err
+          // });
+        }
 
         // If a user with email does exist, return an error
-        if (existingUser) { return res.status(422).send({ error: 'Email is in use' }); }
+        if (existingUser) {
+          const error = new Error('User with the given email already exist');
+          error.name = 'CredentialDeplicationError';
+
+          return res.status(422).json({
+            success: false,
+            error: { 
+              ...error,
+              message: error.message
+            }
+          }); 
+        }
 
         const user = new User({ email, password, username, fullname: username });
 
         await user.save(async (err) => {
           if(err){ return next(err); }
 
-          // const token = await this.tokenForUser(user)
           // Repond to request indicating the user was created
-          const token = await tokenForUser.tokenForUser(user)
-          
-          res.json({ token });
+          return res.status(200).json({
+            userData: { email: email },
+            success: true,
+          });
         })
       })
     }

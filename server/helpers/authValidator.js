@@ -9,31 +9,31 @@ module.exports = function (validator) {
  * @returns {object} The result of validation. Object contains a boolean validation result,
  *                   errors tips, and a global message for the whole form.
  */
-    validateLoginForm(payload){
-      const errors = {};
-      let isFormValid = true;
-      let message = '';
+    // validateLoginForm(payload){
+    //   const errors = {};
+    //   let isFormValid = true;
+    //   let message = '';
 
-      if (!payload || typeof payload.email !== 'string' || payload.email.trim().length === 0) {
-        isFormValid = false;
-        errors.email = 'Please provide a valid email address.';
-      }
+    //   if (!payload || typeof payload.email !== 'string' || payload.email.trim().length === 0) {
+    //     isFormValid = false;
+    //     errors.email = 'Please provide a valid email address.';
+    //   }
     
-      if (!payload || typeof payload.password !== 'string' || payload.password.trim().length === 0) {
-        isFormValid = false;
-        errors.password = 'Please provide a valid password.';
-      }
+    //   if (!payload || typeof payload.password !== 'string' || payload.password.trim().length === 0) {
+    //     isFormValid = false;
+    //     errors.password = 'Please provide a valid password.';
+    //   }
     
-      if (!isFormValid) {
-        message = 'Check the form for errors.';
-      }
+    //   if (!isFormValid) {
+    //     message = 'Check the form for errors.';
+    //   }
     
-      return {
-        success: isFormValid,
-        message,
-        errors
-      };
-    },
+    //   return {
+    //     success: isFormValid,
+    //     message,
+    //     errors
+    //   };
+    // },
     /**
    * Validate the sign up form
    *
@@ -62,12 +62,11 @@ module.exports = function (validator) {
       }
 
       if (!isFormValid) {
-        message = 'Check the form for errors.';
+        errors.message = 'Check the form for errors.';
       }
 
       return {
         success: isFormValid,
-        message,
         errors
       };
     }

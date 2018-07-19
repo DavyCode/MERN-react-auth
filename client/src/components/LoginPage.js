@@ -19,11 +19,11 @@ class LoginPage extends Component {
     }
   }
   componentDidMount(){
-    // if(this.props.auth.userData){
-    //   this.setState(() => ({email: this.props.auth.userData.email }))
-    // }else{
-    //   console.log('Nothing Found here')
-    // }
+    if(this.props.auth.userData){
+      this.setState(() => ({email: this.props.auth.userData.email }))
+    }else{
+      console.log('No email currently in state')
+    }
   }
   onFormSubmit (e) {
     e.preventDefault()

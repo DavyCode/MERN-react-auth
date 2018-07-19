@@ -31,13 +31,11 @@ export const authRegister = function (user, history) {
 
     await axios.post(`${AUTH_URL}/register`, user) 
     .then(response => {
-      console.log(response, '**')
       dispatch(authSuccess(response.data))
       history.push('/')
     })
     .catch(error => {
-      dispatch(authFail(error))
-      // history.push('/register')
+      dispatch(authFail(error.response.data.error))
     });
   }
 }
@@ -49,15 +47,20 @@ export const authLogin = (user, history) => {
   return async (dispatch) => {
     dispatch(authStart());
 
-    await axios.post('/auth/login', user)
+    await axios.post(`${AUTH_URL}/login`, user)
     .then((response) => {
       Auth.authenticateUser(response.data.token)
       dispatch(authSuccess(response.data))
       history.push('/home')
     })
-    .catch(error => {
-      console.log(error, 'the login dint work sad!!')
-      dispatch(authFail(error))
+    .catch(err => {
+
+      const errorMessage = {
+        name: err.response.data || 'Unauthorized',
+        message: 'Make sure you\'re submiting a valid credential'
+      }
+      console.log('Error loging in', err)
+      dispatch(authFail(errorMessage))
     })
   }
 }

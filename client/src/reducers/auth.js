@@ -4,7 +4,6 @@ const initialState = {
   token: null,
   errors: null,
   loading: false, 
-  message: null,
   success: false,
   userData: null
 } 
@@ -17,13 +16,14 @@ const authStart = (state, action) => {
   }
 }
 
+
 const authSuccess = (state, action) => {
   return {
     ...state,
     errors: null,
     loading: false,
     success: true,
-    ...action.payload
+    ...action.payload //handle both cases where we expect user data on sign up or token on sign in
   }
 }
 
@@ -31,9 +31,7 @@ const authFail = (state, action) => {
   return {
     ...state,
     loading: false,
-    ...action.payload.response.data 
-    // message: action.payload.response.data.message,
-    // success: action.payload.response.data.success
+    errors: action.payload
   }
 }
 
