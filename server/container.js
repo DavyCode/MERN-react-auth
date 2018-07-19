@@ -1,10 +1,12 @@
-const dependable = require('dependable'),
+const 
+      dependable = require('dependable'),
       path = require('path'),
       container = dependable.container();
 
 const simpleDependencies = [
-  ['passport','passport'],
-  ['User', './models/user']
+  ['passport', 'passport'],
+  ['User', './models/user'],
+  ['validator', 'validator']
 ];
 
 simpleDependencies.forEach((val) => {

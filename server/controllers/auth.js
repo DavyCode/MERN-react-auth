@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = function (passport, User, tokenForUser, checkAuth) {
+module.exports = function (passport, User, tokenForUser, checkAuth, authValidator) {
 
   const requireLoginAuth = passport.authenticate('local', { session: false });
 
@@ -22,20 +22,34 @@ module.exports = function (passport, User, tokenForUser, checkAuth) {
      * User Login
     ******************************/
     async login (req, res, next) {
-        // User has already had their email and password auth'd
-        // We just need to give them a token
-        const token = await tokenForUser.tokenForUser(req.user)
-        res.send({ token }); 
+      const validationResult = await authValidator.validateLoginForm(req.body);
+      console.log('validationResult :', '**{{{', validationResult, '}}}**')
+
+      // User has already had their email and password auth'd
+      // We just need to give them a token
+      const token = await tokenForUser.tokenForUser(req.user)
+      res.send({ token }); 
     },
     /****************
      * User Register
     ******************************/
     async register (req, res, next) {
-      const { email, password } = req.body;
+      const validationResult = await authValidator.validateSignupForm(req.body);
+      console.log('validationResult :', '**{{{', validationResult, '}}}**')
 
-      if(!email || !password) {
-        return res.status(422).send({ error: 'Email and password required'})
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: validationResult.message,
+          errors: validationResult.errors
+        });
       }
+
+      const { email, password, username } = req.body;
+
+      // if(!email || !password) {
+      //   return res.status(422).send({ error: 'Email and password required'})
+      // }
 
       await User.findOne({ email: email }, async (err, existingUser) => {
         if(err) { return next(err); }
@@ -43,7 +57,7 @@ module.exports = function (passport, User, tokenForUser, checkAuth) {
         // If a user with email does exist, return an error
         if (existingUser) { return res.status(422).send({ error: 'Email is in use' }); }
 
-        const user = new User({ email, password });
+        const user = new User({ email, password, username, fullname: username });
 
         await user.save(async (err) => {
           if(err){ return next(err); }

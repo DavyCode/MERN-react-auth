@@ -1,10 +1,10 @@
 {
   "name": "mern-react-auth",
   "version": "1.0.0",
-  "description": "Node passport setup for a typical react application",
+  "description": "Node authentication setup for a typical react application",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/server"
+    "start": "nodemon server.js"
   },
   "author": "Azemoh Paul",
   "license": "ISC",
@@ -20,7 +20,8 @@
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "validator": "^10.4.0"
   },
   "devDependencies": {
     "chalk": "^2.4.1"
