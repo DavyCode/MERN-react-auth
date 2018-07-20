@@ -2,7 +2,8 @@ import axios from 'axios'
 import {  
   AUTH_FAIL,
   AUTH_START,
-  AUTH_SUCCESS
+  AUTH_SUCCESS,
+  AUTH_LOGOUT
 } from './types'
 import Auth from '../modules/Auth'
 
@@ -20,6 +21,10 @@ export const authSuccess = (payload) => ({
 export const authFail = (payload) => ({
   type: AUTH_FAIL,
   payload
+})
+
+export const authLogout = () => ({
+  type: AUTH_LOGOUT,
 })
 
 /**********
@@ -49,21 +54,30 @@ export const authLogin = (user, history) => {
 
     await axios.post(`${AUTH_URL}/login`, user)
     .then((response) => {
+      //add token to local storage
       Auth.authenticateUser(response.data.token)
       dispatch(authSuccess(response.data))
       history.push('/home')
     })
     .catch(err => {
-
       const errorMessage = {
         name: err.response.data || 'Unauthorized',
         message: 'Make sure you\'re submiting a valid credential'
       }
-      console.log('Error loging in', err)
       dispatch(authFail(errorMessage))
     })
   }
 }
+
+
+export const logout = () => {
+  Auth.deauthenticateUser();
+
+  return (dispatch) => {
+    dispatch(authLogout())
+  };
+};
+
 
 
 

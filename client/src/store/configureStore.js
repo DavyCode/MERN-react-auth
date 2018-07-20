@@ -9,6 +9,9 @@ export default () => {
     combineReducers({
       auth: authReducer
     }),
+    {
+      auth: { token: localStorage.getItem('token') }
+    },
     composeEnhancers(applyMiddleware(thunk))
   );
 

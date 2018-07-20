@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import Header from '../components/partials/Header';
 
 export const PrivateRoute = (props) => {
-  const { isAuthenticated, component: Component, ...rest} = props
+  const { isAuthenticated, component: Component, ...rest} = props;
 
   return (
     <Route {...rest} component={(props) => (

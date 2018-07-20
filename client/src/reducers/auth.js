@@ -1,4 +1,4 @@
-import { AUTH_FAIL, AUTH_START, AUTH_SUCCESS} from '../actions/types'
+import { AUTH_FAIL, AUTH_START, AUTH_SUCCESS, AUTH_LOGOUT} from '../actions/types'
 
 const initialState = {
   token: null,
@@ -35,11 +35,19 @@ const authFail = (state, action) => {
   }
 }
 
+const authLogout = (state, action) => {
+  return {
+    ...initialState,
+    token: ''
+  }
+}
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case AUTH_START: return authStart(state, action)
     case AUTH_SUCCESS: return authSuccess(state, action)
     case AUTH_FAIL: return authFail(state, action)  
+    case AUTH_LOGOUT: return authLogout(state, action)  
     default:
       return state
   }
