@@ -5,7 +5,9 @@ const
 
 // Create local strategy
 const localLogin = new LocalStrategy(
-  { usernameField: 'email' } 
+  { 
+    usernameField: 'email'
+  } 
   ,(email, password, done) => {
   // Verify this email and password, call done with the user
   // if it is the correct email and password

@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import * as actions from '../actions/auth'
 
-
-
 class LoginPage extends Component {
   constructor(props){
     super(props)
@@ -14,8 +12,7 @@ class LoginPage extends Component {
 
     this.state = {
       email: '',
-      password: '',
-      error: '',
+      password: ''
     }
   }
   componentDidMount(){
@@ -33,7 +30,6 @@ class LoginPage extends Component {
   handleChange (e) {
     const val = e.target.value;
     const name = e.target.name;
-
     this.setState(() => ({[name] : val}))
   }
 
@@ -42,6 +38,7 @@ class LoginPage extends Component {
       <div>
         <h1>Landing && Login</h1>
         <form onSubmit={this.onFormSubmit}>
+          {this.props.auth.errors && <p>{this.props.auth.errors.message}</p>}
           <input onChange={this.handleChange} value={this.state.email} name="email" type="text" placeholder="Email"/> <br/>
           <input onChange={this.handleChange} value={this.state.password} name="password" type="password" placeholder="Password"/>
           <button>LOGIN</button>
@@ -51,10 +48,8 @@ class LoginPage extends Component {
   }
 }
 
-
 const mapStateToProps = (state, props) => {
   return { auth : state.auth }
 }
 
 export default connect(mapStateToProps, actions)(LoginPage)
-
